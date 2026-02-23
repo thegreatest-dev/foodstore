@@ -51,8 +51,9 @@ select {
 
 input::placeholder,
 textarea::placeholder {
-  color: #6b7280;
+  color: #b0b6be;
   opacity: 1;
+  font-weight: 400;
 }
 
 /* Typography Scale */

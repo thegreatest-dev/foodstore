@@ -183,13 +183,21 @@ export default function FeaturedProductsCarousel() {
       >
         <div
           className="flex transition-transform duration-500 ease-in-out gap-6"
-          style={{ transform: `translateX(-${currentIndex * (100 / cardsPerView)}%)` }}
+          style={{
+            // Center the card on mobile, normal scroll on desktop
+            transform:
+              cardsPerView === 1
+                ? `translateX(-${currentIndex * 100}%)`
+                : `translateX(-${currentIndex * (100 / cardsPerView)}%)`,
+          }}
         >
           {tabProducts.map((product) => (
             <div
               key={`${activeTab}-${product.id}`}
               className="flex-shrink-0"
-              style={{ width: `calc(${100 / cardsPerView}% - ${(cardsPerView - 1) * 24 / cardsPerView}px)` }}
+              style={{
+                width: cardsPerView === 1 ? "100%" : `calc(${100 / cardsPerView}% - ${(cardsPerView - 1) * 24 / cardsPerView}px)`
+              }}
             >
               <ProductCard
                 id={product.id}
