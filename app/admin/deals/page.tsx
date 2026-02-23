@@ -147,7 +147,7 @@ export default function AdminDealsPage() {
           </div>
         )}
 
-        <div className="flex items-center justify-between mb-6">
+        <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <h2 className="text-lg font-semibold text-gray-900">Current Selection</h2>
             <p className="text-sm text-gray-500">
@@ -157,7 +157,7 @@ export default function AdminDealsPage() {
           <button
             onClick={handleSave}
             disabled={saving || loading}
-            className="inline-flex items-center gap-2 rounded-full bg-green-500 px-5 py-2.5 text-sm font-semibold text-white hover:bg-green-600 transition-colors disabled:opacity-50"
+            className="inline-flex w-full sm:w-auto items-center justify-center gap-2 rounded-xl sm:rounded-full bg-green-500 px-4 py-2.5 text-sm font-semibold text-white hover:bg-green-600 transition-colors disabled:opacity-50"
           >
             {saving ? (
               <>
@@ -181,7 +181,7 @@ export default function AdminDealsPage() {
               </>
             ) : (
               <>
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="hidden sm:block w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                 </svg>
                 Save changes
@@ -220,11 +220,11 @@ export default function AdminDealsPage() {
                       <p className="font-semibold text-sm text-gray-900 line-clamp-1">{product.name}</p>
                       <p className="text-xs text-gray-400">{product.category || "Uncategorized"}</p>
                     </div>
-                    <div className="flex items-center justify-between gap-2">
+                    <div className="grid grid-cols-2 gap-2 sm:flex sm:items-center sm:justify-between">
                       <button
                         onClick={() => moveDeal(index, -1)}
                         disabled={index === 0}
-                        className="rounded-full border border-gray-300 bg-white p-2 text-gray-700 hover:text-gray-800 hover:border-gray-400 transition-colors disabled:opacity-40"
+                        className="inline-flex items-center justify-center rounded-full border border-gray-300 bg-white p-2 text-gray-700 hover:text-gray-800 hover:border-gray-400 transition-colors disabled:opacity-40"
                         aria-label="Move up"
                       >
                         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -234,7 +234,7 @@ export default function AdminDealsPage() {
                       <button
                         onClick={() => moveDeal(index, 1)}
                         disabled={index === selectedProducts.length - 1}
-                        className="rounded-full border border-gray-300 bg-white p-2 text-gray-700 hover:text-gray-800 hover:border-gray-400 transition-colors disabled:opacity-40"
+                        className="inline-flex items-center justify-center rounded-full border border-gray-300 bg-white p-2 text-gray-700 hover:text-gray-800 hover:border-gray-400 transition-colors disabled:opacity-40"
                         aria-label="Move down"
                       >
                         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -243,7 +243,7 @@ export default function AdminDealsPage() {
                       </button>
                       <button
                         onClick={() => toggleDeal(product.id)}
-                        className="rounded-full border border-red-200 bg-white px-3 py-1.5 text-xs font-semibold text-red-600 hover:bg-red-50 transition-colors"
+                        className="col-span-2 sm:col-auto inline-flex items-center justify-center rounded-full border border-red-200 bg-white px-3 py-1.5 text-xs font-semibold text-red-600 hover:bg-red-50 transition-colors"
                       >
                         Remove
                       </button>
