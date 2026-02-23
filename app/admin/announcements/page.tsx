@@ -123,7 +123,7 @@ export default function AdminAnnouncementsPage() {
       <div className="max-w-5xl mx-auto px-4 sm:px-8 py-6 sm:py-8 grid grid-cols-1 lg:grid-cols-5 gap-6 sm:gap-8">
         {/* Form */}
         <div className="lg:col-span-2">
-          <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 sticky top-6">
+          <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 lg:sticky lg:top-6">
             <h2 className="text-base font-bold text-gray-900 mb-4">
               {editing ? "Edit Announcement" : "New Announcement"}
             </h2>
@@ -206,7 +206,7 @@ export default function AdminAnnouncementsPage() {
                     </div>
                     <p className="text-sm text-gray-500 line-clamp-2">{a.message}</p>
                   </div>
-                  <div className="flex items-center gap-1 flex-shrink-0">
+                  <div className="flex items-center gap-1.5 flex-wrap justify-end flex-shrink-0 sm:flex-nowrap">
                     <button
                       onClick={() => toggleActive(a)}
                       className="text-xs px-3 py-1.5 rounded-full border border-gray-200 hover:border-green-400 hover:text-green-600 transition-colors"
