@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import CategoryCard from "@/app/components/CategoryCard";
 import { CATEGORIES } from "@/app/lib/categories";
 
@@ -17,6 +17,8 @@ export default function TopCategoriesCarousel({ categoryCounts = {} }: TopCatego
   }));
   const [currentIndex, setCurrentIndex] = useState(0);
   const [cardsPerView, setCardsPerView] = useState(6);
+  const touchStartX = useRef<number | null>(null);
+  const touchEndX = useRef<number | null>(null);
 
   // Handle responsive cards per view
   useEffect(() => {
@@ -50,6 +52,28 @@ export default function TopCategoriesCarousel({ categoryCounts = {} }: TopCatego
     setCurrentIndex((prev) => Math.min(maxIndex, prev + 1));
   };
 
+  const handleTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
+    touchStartX.current = e.changedTouches[0].clientX;
+    touchEndX.current = null;
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent<HTMLDivElement>) => {
+    if (touchStartX.current === null) return;
+
+    touchEndX.current = e.changedTouches[0].clientX;
+    const swipeDistance = touchStartX.current - touchEndX.current;
+    const minSwipe = 40;
+
+    if (swipeDistance > minSwipe) {
+      handleNext();
+    } else if (swipeDistance < -minSwipe) {
+      handlePrev();
+    }
+
+    touchStartX.current = null;
+    touchEndX.current = null;
+  };
+
   return (
     <>
       {/* Header with Navigation */}
@@ -81,7 +105,11 @@ export default function TopCategoriesCarousel({ categoryCounts = {} }: TopCatego
       </div>
 
       {/* Carousel Container */}
-      <div className="overflow-hidden mt-8">
+      <div
+        className="overflow-hidden mt-8"
+        onTouchStart={handleTouchStart}
+        onTouchEnd={handleTouchEnd}
+      >
         <div 
           className="flex transition-transform duration-500 ease-in-out gap-4"
           style={{

@@ -24,6 +24,17 @@ export default async function Home() {
 
   const latestPosts = recentPosts.slice(0, 3);
 
+  const formatPostDate = (value: string | undefined) => {
+    if (!value) return "Latest";
+    const dt = new Date(value);
+    if (Number.isNaN(dt.getTime())) return "Latest";
+    return dt.toLocaleDateString("en-GB", {
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+    });
+  };
+
   // Build live category counts to pass to the carousel.
   const categoryCounts: Record<string, number> = {};
   allProducts.forEach((p) => {
@@ -344,7 +355,48 @@ export default async function Home() {
           </Link>
         </div>
 
-        <BlogCarousel posts={latestPosts} />
+        <div className="md:hidden">
+          <BlogCarousel posts={latestPosts} />
+        </div>
+
+        <div className="hidden md:grid grid-cols-3 gap-6">
+          {latestPosts.map((post) => (
+            <article
+              key={post.id}
+              className="group overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm hover:shadow-md transition-shadow"
+            >
+              <div className="relative h-52 overflow-hidden">
+                <Image
+                  src={post.coverImage || "/images/12_spice.jfif"}
+                  alt={post.title}
+                  fill
+                  className="object-cover transition-transform duration-300 group-hover:scale-105"
+                />
+                <span className="absolute left-3 top-3 rounded-full bg-green-500/95 px-3 py-1 text-[11px] font-semibold text-white">
+                  {formatPostDate(post.createdAt)}
+                </span>
+              </div>
+
+              <div className="p-4">
+                <h3 className="text-lg font-semibold text-gray-900 line-clamp-2 min-h-[3.25rem]">
+                  {post.title}
+                </h3>
+                <p className="mt-2 text-sm text-gray-500 line-clamp-2 min-h-[2.5rem]">
+                  {post.excerpt || "Fresh updates and practical kitchen tips from our team."}
+                </p>
+                <Link
+                  href={`/blog/${post.slug}`}
+                  className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-green-600 hover:text-green-700"
+                >
+                  Read More
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                  </svg>
+                </Link>
+              </div>
+            </article>
+          ))}
+        </div>
       </section>
 
       {/* Newsletter Section */}

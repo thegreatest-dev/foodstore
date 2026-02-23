@@ -39,6 +39,22 @@ p, span, a, button, input, textarea, select, label {
   font-family: var(--font-inter), system-ui, -apple-system, sans-serif;
 }
 
+/* Keep form field text readable on mobile (including dark-mode system preference) */
+input,
+textarea,
+select {
+  color: #111827;
+  background-color: #ffffff;
+  -webkit-text-fill-color: #111827;
+  opacity: 1;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: #6b7280;
+  opacity: 1;
+}
+
 /* Typography Scale */
 /* Hero headings: 40–56px */
 .text-hero {
