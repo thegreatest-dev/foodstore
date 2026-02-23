@@ -1,0 +1,102 @@
+@import "tailwindcss";
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-heading: var(--font-poppins);
+  --font-body: var(--font-inter);
+  --font-family-poppins: var(--font-poppins), system-ui, -apple-system, sans-serif;
+  --font-family-inter: var(--font-inter), system-ui, -apple-system, sans-serif;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-inter), system-ui, -apple-system, sans-serif;
+  overflow-x: hidden;
+}
+
+/* Apply Poppins to all headings */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-poppins), system-ui, -apple-system, sans-serif;
+  font-weight: 700;
+}
+
+/* Apply Inter to body text elements */
+p, span, a, button, input, textarea, select, label {
+  font-family: var(--font-inter), system-ui, -apple-system, sans-serif;
+}
+
+/* Typography Scale */
+/* Hero headings: 40–56px */
+.text-hero {
+  font-size: 40px;
+  line-height: 1.2;
+}
+
+@media (min-width: 1024px) {
+  .text-hero {
+    font-size: 56px;
+  }
+}
+
+/* Section titles: 22–28px */
+.text-section-title {
+  font-size: 22px;
+  line-height: 1.3;
+}
+
+@media (min-width: 768px) {
+  .text-section-title {
+    font-size: 28px;
+  }
+}
+
+/* Product names: 16–18px */
+.text-product-name {
+  font-size: 16px;
+  line-height: 1.4;
+}
+
+@media (min-width: 768px) {
+  .text-product-name {
+    font-size: 18px;
+  }
+}
+
+/* Body text: 14–16px */
+.text-body {
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+@media (min-width: 768px) {
+  .text-body {
+    font-size: 16px;
+  }
+}
+
+/* Buttons: 14–16px (medium weight) */
+.text-button {
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.5;
+}
+
+@media (min-width: 768px) {
+  .text-button {
+    font-size: 16px;
+  }
+}
