@@ -61,21 +61,27 @@ export default function Footer() {
               </div>
             </div>
             <div className="flex gap-3">
-              {[
-                { href: "https://facebook.com", label: "Facebook" },
-                { href: "https://twitter.com", label: "Twitter" },
-                { href: "https://pinterest.com", label: "Pinterest" },
-                { href: "https://instagram.com", label: "Instagram" },
-              ].map((link) => (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  target="_blank"
-                  className="flex h-10 w-10 items-center justify-center rounded-full border border-white/20 text-white/70 transition hover:border-white hover:text-white"
-                >
-                  <span className="text-xs font-semibold uppercase tracking-widest">{link.label[0]}</span>
-                </Link>
-              ))}
+              <Link
+                href="https://facebook.com"
+                target="_blank"
+                className="flex h-10 w-10 items-center justify-center rounded-full border border-white/20 text-white/70 transition hover:border-white hover:text-white"
+              >
+                <img src="/images/face.png" alt="Facebook" className="h-6 w-6" />
+              </Link>
+              <Link
+                href="https://twitter.com"
+                target="_blank"
+                className="flex h-10 w-10 items-center justify-center rounded-full border border-white/20 text-white/70 transition hover:border-white hover:text-white"
+              >
+                <img src="/images/twit.png" alt="Twitter" className="h-6 w-6" />
+              </Link>
+              <Link
+                href="https://instagram.com"
+                target="_blank"
+                className="flex h-10 w-10 items-center justify-center rounded-full border border-white/20 text-white/70 transition hover:border-white hover:text-white"
+              >
+                <img src="/images/insta.png" alt="Instagram" className="h-6 w-6" />
+              </Link>
             </div>
           </div>
 

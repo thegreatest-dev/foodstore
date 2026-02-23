@@ -5,7 +5,8 @@ import TopCategoriesCarousel from "@/app/components/TopCategoriesCarousel";
 import DealOfTheWeek from "@/app/components/DealOfTheWeek";
 import PromoCarousel from "@/app/components/PromoCarousel";
 import BlogCarousel from "@/app/components/BlogCarousel";
-import CountdownTimer from "@/app/components/CountdownTimer";
+import DiscountBanner from "@/app/components/DiscountBanner";
+import StatCounter from "@/app/components/StatCounter";
 import { getDealProducts } from "@/app/lib/deals";
 import { getProducts } from "@/app/lib/products";
 import { getPublishedPostsServer } from "@/app/lib/blogs-server";
@@ -90,18 +91,9 @@ export default async function Home() {
                 </Link>
               </div>
               <div className="grid grid-cols-3 gap-3 pt-2">
-                <div className="rounded-2xl border border-white/25 bg-white/10 px-4 py-3 text-center">
-                  <p className="text-xl font-bold text-white">1k+</p>
-                  <p className="text-xs sm:text-sm text-white/80">Products</p>
-                </div>
-                <div className="rounded-2xl border border-white/25 bg-white/10 px-4 py-3 text-center">
-                  <p className="text-xl font-bold text-white">24h</p>
-                  <p className="text-xs sm:text-sm text-white/80">Delivery</p>
-                </div>
-                <div className="rounded-2xl border border-white/25 bg-white/10 px-4 py-3 text-center">
-                  <p className="text-xl font-bold text-white">99%</p>
-                  <p className="text-xs sm:text-sm text-white/80">Freshness</p>
-                </div>
+                <StatCounter value={1000} label="Products" suffix="+" />
+                <StatCounter value={24} label="Delivery" suffix="h" />
+                <StatCounter value={99} label="Freshness" suffix="%" />
               </div>
             </div>
 
@@ -286,38 +278,7 @@ export default async function Home() {
       </section>
 
       {/* 40% Discount Banner with Countdown */}
-      <section className="container mx-auto px-4 py-6 sm:py-10">
-        <div className="relative rounded-3xl overflow-hidden" style={{
-          backgroundImage: `url(${siteImages.discountBanner})`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center'
-        }}>
-          {/* Dark overlay */}
-          <div className="absolute inset-0 bg-black/50"></div>
-          
-          <div className="relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-6 p-6 sm:p-10 lg:p-16">
-            {/* Left Content */}
-            <div className="text-white">
-              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4 sm:mb-6">
-                UP To 40% Discount<br />On Selected Items
-              </h2>
-              <p className="text-gray-200 text-lg mb-8 max-w-md">
-                Stock up on everyday essentials for less.
-              </p>
-
-              {/* Countdown Timer */}
-              <CountdownTimer initialDays={28} initialHours={15} initialMinutes={55} initialSeconds={60} />
-
-              <Link href="/products" className="bg-white text-gray-900 px-8 py-3.5 rounded-full text-sm font-bold hover:bg-gray-100 active:scale-95 transition-all">
-                Shop Now
-              </Link>
-            </div>
-
-            {/* Right side - image is part of background */}
-            <div></div>
-          </div>
-        </div>
-      </section>
+      <DiscountBanner discountBanner={siteImages.discountBanner} />
 
       {/* Our Recent Post Section */}
       <section className="container mx-auto px-4 py-6 sm:py-10">
