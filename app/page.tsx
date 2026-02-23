@@ -8,16 +8,18 @@ import BlogCarousel from "@/app/components/BlogCarousel";
 import { getDealProducts } from "@/app/lib/deals";
 import { getProducts } from "@/app/lib/products";
 import { getPublishedPostsServer } from "@/app/lib/blogs-server";
+import { getSiteImagesServer } from "@/app/lib/site-images-server";
 import { CATEGORIES } from "@/app/lib/categories";
 
 export const revalidate = 60;
 
 export default async function Home() {
   // Fetch products once; split into deal vs. all for category counts.
-  const [dealProducts, allProducts, recentPosts] = await Promise.all([
+  const [dealProducts, allProducts, recentPosts, siteImages] = await Promise.all([
     getDealProducts().catch(() => []),
     getProducts().catch(() => []),
     getPublishedPostsServer().catch(() => []),
+    getSiteImagesServer(),
   ]);
 
   const latestPosts = recentPosts.slice(0, 3);
@@ -35,7 +37,7 @@ export default async function Home() {
         {/* Background Image */}
         <div className="absolute inset-0 z-0">
           <Image
-            src="/images/Top_background.jfif"
+            src={siteImages.heroBackground}
             alt="Background"
             fill
             className="object-cover"
@@ -96,7 +98,7 @@ export default async function Home() {
               <div className="absolute inset-0 bg-white/10 rounded-[2rem] transform translate-x-6 translate-y-6 backdrop-blur-sm" />
               <div className="relative z-10 h-[420px] w-full rounded-[2rem] overflow-hidden shadow-2xl border border-white/20">
                 <Image
-                  src="/images/fresh.jfif"
+                  src={siteImages.heroSideImage}
                   alt="Fresh groceries"
                   fill
                   className="object-cover"
@@ -116,7 +118,13 @@ export default async function Home() {
 
       {/* Promotional Cards Section */}
       <section className="container mx-auto px-4 py-6 sm:py-10">
-        <PromoCarousel />
+        <PromoCarousel
+          images={{
+            vegetables: siteImages.promoVegetables,
+            spices: siteImages.promoSpices,
+            potato: siteImages.promoPotato,
+          }}
+        />
       </section>
 
       {/* Top Categories Section */}
@@ -188,7 +196,7 @@ export default async function Home() {
           <div className="relative rounded-3xl p-8 overflow-hidden h-64">
             {/* Background Image */}
             <Image 
-              src="/images/oil.png" 
+              src={siteImages.featuredBannerOil}
               alt="Oils & Pantry Background" 
               fill
               className="object-cover"
@@ -210,7 +218,7 @@ export default async function Home() {
           <div className="relative rounded-3xl p-8 overflow-hidden h-64">
             {/* Background Image */}
             <Image 
-              src="/images/fresh.jfif" 
+              src={siteImages.featuredBannerFresh}
               alt="Fresh Products Background" 
               fill
               className="object-cover"
@@ -268,7 +276,7 @@ export default async function Home() {
       {/* 40% Discount Banner with Countdown */}
       <section className="container mx-auto px-4 py-6 sm:py-10">
         <div className="relative rounded-3xl overflow-hidden" style={{
-          backgroundImage: 'url(/images/spice_background.jfif)',
+          backgroundImage: `url(${siteImages.discountBanner})`,
           backgroundSize: 'cover',
           backgroundPosition: 'center'
         }}>

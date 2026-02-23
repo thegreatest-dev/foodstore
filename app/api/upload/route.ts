@@ -26,13 +26,17 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "File size must be under 5 MB." }, { status: 400 });
     }
 
+    // Optional folder via query param: /api/upload?folder=blogs
+    const { searchParams } = new URL(req.url);
+    const folder = searchParams.get("folder") ?? "products";
+
     // Convert File → base64 data URI for Cloudinary
     const arrayBuffer = await file.arrayBuffer();
     const base64 = Buffer.from(arrayBuffer).toString("base64");
     const dataUri = `data:${file.type};base64,${base64}`;
 
     const result = await cloudinary.uploader.upload(dataUri, {
-      folder: "products",
+      folder,
       resource_type: "image",
     });
 

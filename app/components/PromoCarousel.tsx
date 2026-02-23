@@ -4,6 +4,12 @@ import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 
+type PromoCarouselImages = {
+  vegetables?: string;
+  spices?: string;
+  potato?: string;
+};
+
 const SLIDES = [
   {
     bg: "from-blue-50 to-blue-100",
@@ -45,14 +51,20 @@ const SLIDES = [
 
 const INTERVAL = 3500;
 
-export default function PromoCarousel() {
+export default function PromoCarousel({ images }: { images?: PromoCarouselImages }) {
   const [active, setActive] = useState(0);
   const [paused, setPaused] = useState(false);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
+  const slides = [
+    { ...SLIDES[0], img: images?.vegetables ?? SLIDES[0].img },
+    { ...SLIDES[1], img: images?.spices ?? SLIDES[1].img },
+    { ...SLIDES[2], img: images?.potato ?? SLIDES[2].img },
+  ];
+
   const start = () => {
     timerRef.current = setInterval(() => {
-      setActive((prev) => (prev + 1) % SLIDES.length);
+      setActive((prev) => (prev + 1) % slides.length);
     }, INTERVAL);
   };
 
@@ -87,7 +99,7 @@ export default function PromoCarousel() {
         className="flex transition-transform duration-700 ease-in-out"
         style={{ transform: `translateX(-${active * 100}%)` }}
       >
-        {SLIDES.map((slide) => (
+        {slides.map((slide) => (
           <div key={slide.title} className="w-full shrink-0 px-1">
             <div
               className={`group relative bg-gradient-to-br ${slide.bg} rounded-3xl p-6 sm:p-8 overflow-hidden transition-all duration-300 cursor-pointer`}
@@ -136,7 +148,7 @@ export default function PromoCarousel() {
 
       {/* Dot indicators */}
       <div className="flex justify-center gap-2 mt-4">
-        {SLIDES.map((slide, i) => (
+        {slides.map((slide, i) => (
           <button
             key={slide.title}
             onClick={() => goTo(i)}

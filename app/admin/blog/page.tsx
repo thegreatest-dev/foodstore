@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import {
@@ -55,6 +55,26 @@ export default function AdminBlogPage() {
   const [showForm, setShowForm] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+  const [uploading, setUploading] = useState(false);
+  const [uploadError, setUploadError] = useState("");
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handleImageUpload = async (file: File) => {
+    setUploading(true);
+    setUploadError("");
+    try {
+      const fd = new FormData();
+      fd.append("file", file);
+      const res = await fetch("/api/upload?folder=blogs", { method: "POST", body: fd });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error ?? "Upload failed");
+      set("coverImage", data.url);
+    } catch (err) {
+      setUploadError(err instanceof Error ? err.message : "Upload failed. Please try again.");
+    } finally {
+      setUploading(false);
+    }
+  };
 
   const load = async () => {
     setLoading(true);
@@ -302,16 +322,84 @@ export default function AdminBlogPage() {
 
             {/* Cover Image */}
             <div>
-              <label className="block text-xs font-semibold uppercase tracking-wide text-gray-500 mb-1.5">Cover Image URL</label>
+              <label className="block text-xs font-semibold uppercase tracking-wide text-gray-500 mb-1.5">Cover Image</label>
+
+              {/* Upload area */}
+              <div
+                onClick={() => !uploading && fileInputRef.current?.click()}
+                onDragOver={(e) => e.preventDefault()}
+                onDrop={(e) => {
+                  e.preventDefault();
+                  const file = e.dataTransfer.files[0];
+                  if (file) handleImageUpload(file);
+                }}
+                className={`relative flex flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed px-4 py-6 text-sm transition-colors cursor-pointer ${
+                  uploading
+                    ? "border-green-300 bg-green-50 cursor-wait"
+                    : "border-gray-200 bg-gray-50 hover:border-green-400 hover:bg-green-50/50"
+                }`}
+              >
+                {uploading ? (
+                  <>
+                    <svg className="w-6 h-6 text-green-500 animate-spin" viewBox="0 0 24 24" fill="none">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                    </svg>
+                    <p className="text-green-600 font-medium">Uploading…</p>
+                  </>
+                ) : (
+                  <>
+                    <svg className="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+                    </svg>
+                    <p className="text-gray-500">Click or drag & drop an image here</p>
+                    <p className="text-xs text-gray-400">PNG, JPG, WEBP · max 5 MB</p>
+                  </>
+                )}
+              </div>
+
+              {/* Hidden file input */}
               <input
-                value={form.coverImage}
-                onChange={(e) => set("coverImage", e.target.value)}
-                placeholder="https://... or /images/cover.jpg"
-                className="w-full rounded-xl border border-gray-200 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-400"
+                ref={fileInputRef}
+                type="file"
+                accept="image/*"
+                className="hidden"
+                onChange={(e) => {
+                  const file = e.target.files?.[0];
+                  if (file) handleImageUpload(file);
+                  e.target.value = "";
+                }}
               />
+
+              {uploadError && (
+                <p className="mt-2 text-xs text-red-500">{uploadError}</p>
+              )}
+
+              {/* Manual URL fallback */}
+              <div className="mt-3">
+                <p className="text-xs text-gray-400 mb-1">Or paste a URL directly</p>
+                <input
+                  value={form.coverImage}
+                  onChange={(e) => set("coverImage", e.target.value)}
+                  placeholder="https://res.cloudinary.com/..."
+                  className="w-full rounded-xl border border-gray-200 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-400"
+                />
+              </div>
+
+              {/* Preview */}
               {form.coverImage && (
-                <div className="mt-3 relative h-32 w-full rounded-xl overflow-hidden border border-gray-100">
+                <div className="mt-3 relative h-40 w-full rounded-xl overflow-hidden border border-gray-100 group">
                   <Image src={form.coverImage} alt="Cover preview" fill className="object-cover" />
+                  <button
+                    type="button"
+                    onClick={() => set("coverImage", "")}
+                    className="absolute top-2 right-2 h-7 w-7 rounded-full bg-black/60 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-500"
+                    aria-label="Remove image"
+                  >
+                    <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </button>
                 </div>
               )}
             </div>
