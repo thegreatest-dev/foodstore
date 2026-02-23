@@ -86,7 +86,7 @@ export default function CheckoutPage() {
   }
 
   function buildWhatsAppMessage(orderId: string): string {
-    const lines: string[] = [
+    const lines = [
       "🛒 *New Order from DataFoodMart*",
       "",
       `*Order ID:* ${orderId}`,
