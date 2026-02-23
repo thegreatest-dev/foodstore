@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { signOut } from "firebase/auth";
 import { auth } from "@/app/lib/firebase";
@@ -14,6 +14,46 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const [menuOpen, setMenuOpen] = useState(false);
 
   const isLoginPage = pathname === "/admin/login";
+
+  // --- Inactivity-based auto-logout for admin pages ---
+  const logoutTimer = useRef<NodeJS.Timeout | null>(null);
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    // Only set timer if logged in and not on login page
+    if (!user || pathname === "/admin/login") return;
+
+    const resetTimer = () => {
+      if (logoutTimer.current) {
+        clearTimeout(logoutTimer.current);
+      }
+      logoutTimer.current = setTimeout(async () => {
+        await signOut(auth);
+        window.location.href = "/admin/login";
+      }, 4 * 60 * 1000);
+    };
+
+    const activityEvents = [
+      "mousemove",
+      "mousedown",
+      "keydown",
+      "touchstart",
+      "scroll"
+    ];
+    activityEvents.forEach((event) => {
+      window.addEventListener(event, resetTimer);
+    });
+    resetTimer();
+
+    return () => {
+      if (logoutTimer.current) {
+        clearTimeout(logoutTimer.current);
+        logoutTimer.current = null;
+      }
+      activityEvents.forEach((event) => {
+        window.removeEventListener(event, resetTimer);
+      });
+    };
+  }, [user, pathname]);
 
   useEffect(() => {
     if (loading) return;

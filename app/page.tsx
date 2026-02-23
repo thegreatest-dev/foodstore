@@ -5,6 +5,7 @@ import TopCategoriesCarousel from "@/app/components/TopCategoriesCarousel";
 import DealOfTheWeek from "@/app/components/DealOfTheWeek";
 import PromoCarousel from "@/app/components/PromoCarousel";
 import BlogCarousel from "@/app/components/BlogCarousel";
+import CountdownTimer from "@/app/components/CountdownTimer";
 import { getDealProducts } from "@/app/lib/deals";
 import { getProducts } from "@/app/lib/products";
 import { getPublishedPostsServer } from "@/app/lib/blogs-server";
@@ -305,14 +306,7 @@ export default async function Home() {
               </p>
 
               {/* Countdown Timer */}
-              <div className="flex flex-wrap gap-2 sm:gap-4 mb-8">
-                {[["28","Days"],["15","Hours"],["55","Mins"],["60","Secs"]].map(([val,label]) => (
-                  <div key={label} className="rounded-lg border border-white/10 bg-slate-800/80 px-3 py-3 sm:p-4 text-center backdrop-blur-sm flex-1 min-w-[56px] sm:min-w-[72px]">
-                    <div className="text-xl sm:text-3xl font-bold">{val}</div>
-                    <div className="text-xs sm:text-sm opacity-90">{label}</div>
-                  </div>
-                ))}
-              </div>
+              <CountdownTimer initialDays={28} initialHours={15} initialMinutes={55} initialSeconds={60} />
 
               <Link href="/products" className="bg-white text-gray-900 px-8 py-3.5 rounded-full text-sm font-bold hover:bg-gray-100 active:scale-95 transition-all">
                 Shop Now

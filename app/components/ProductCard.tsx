@@ -1,9 +1,11 @@
 "use client";
 
+
 import Image from "next/image";
 import Link from "next/link";
 import { useCartStore } from "@/app/store/cartStore";
 import { useWishlistStore } from "@/app/store/wishlistStore";
+import { useEffect, useState } from "react";
 
 interface ProductCardProps {
   id: string;
@@ -29,7 +31,9 @@ export default function ProductCard({
   const { addItem, removeItem, updateQuantity, items } = useCartStore();
   const { toggle: toggleWishlist, has: inWishlist } = useWishlistStore();
 
-  const wished = inWishlist(id);
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => { setMounted(true); }, []);
+  const wished = mounted ? inWishlist(id) : false;
 
   const cartItem = items.find((item) => item.product.id === id);
   const quantity = cartItem?.quantity ?? 0;
@@ -56,26 +60,28 @@ export default function ProductCard({
     <div className="group bg-white rounded-2xl p-3 sm:p-6 border border-gray-200 hover:shadow-xl hover:border-green-500 transition-all duration-300 relative">
       {/* Quick Actions - Show on hover */}
       <div className="absolute top-2 right-2 sm:top-4 sm:right-4 flex flex-col gap-1.5 sm:gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10">
-        <button
-          onClick={() => toggleWishlist({ id, name, price, originalPrice, image, category })}
-          className={`w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-white shadow-lg border flex items-center justify-center transition-all ${
-            wished
-              ? "border-red-400 bg-red-50"
-              : "border-gray-200 hover:bg-green-50 hover:border-green-500"
-          }`}
-          aria-label={wished ? "Remove from wishlist" : "Add to wishlist"}
-        >
-          <svg
-            className={`w-4 h-4 sm:w-5 sm:h-5 transition-colors ${
-              wished ? "text-red-500 fill-red-500" : "text-gray-600 hover:text-green-500"
+        {mounted && (
+          <button
+            onClick={() => toggleWishlist({ id, name, price, originalPrice, image, category })}
+            className={`w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-white shadow-lg border flex items-center justify-center transition-all ${
+              wished
+                ? "border-red-400 bg-red-50"
+                : "border-gray-200 hover:bg-green-50 hover:border-green-500"
             }`}
-            fill={wished ? "currentColor" : "none"}
-            stroke="currentColor"
-            viewBox="0 0 24 24"
+            aria-label={wished ? "Remove from wishlist" : "Add to wishlist"}
           >
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-          </svg>
-        </button>
+            <svg
+              className={`w-4 h-4 sm:w-5 sm:h-5 transition-colors ${
+                wished ? "text-red-500 fill-red-500" : "text-gray-600 hover:text-green-500"
+              }`}
+              fill={wished ? "currentColor" : "none"}
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+            </svg>
+          </button>
+        )}
         <Link
           href={`/products/${id}`}
           className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-white shadow-lg border border-gray-200 flex items-center justify-center hover:bg-green-50 hover:border-green-500 transition-all"
