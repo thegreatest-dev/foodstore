@@ -1,6 +1,6 @@
 import admin from "firebase-admin";
 import { getFirestore } from "firebase-admin/firestore";
-import serviceAccount from "../../serviceAccountKey.json.json" assert { type: "json" };
+import serviceAccount from "../../serviceAccountKey.json" assert { type: "json" };
 
 // Prevent re-initializing on hot reload in development
 if (!admin.apps.length) {
