@@ -18,7 +18,7 @@ export default function CartItem({
     <div className="flex items-center gap-4 border-b border-zinc-200 dark:border-zinc-800 py-4">
       <div className="relative h-20 w-20 flex-shrink-0">
         <Image
-          src={product.imageUrl || "/placeholder.png"}
+          src={product.image || "/placeholder.png"}
           alt={product.name}
           fill
           className="object-cover rounded"

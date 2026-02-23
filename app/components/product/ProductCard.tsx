@@ -11,7 +11,7 @@ export default function ProductCard({ product, onAddToCart }: ProductCardProps) 
     <div className="rounded-lg border border-zinc-200 dark:border-zinc-800 p-4 transition-shadow hover:shadow-lg">
       <div className="relative h-48 w-full mb-4">
         <Image
-          src={product.imageUrl || "/placeholder.png"}
+          src={product.image || "/placeholder.png"}
           alt={product.name}
           fill
           className="object-cover rounded"
