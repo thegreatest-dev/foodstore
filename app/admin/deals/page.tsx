@@ -224,7 +224,7 @@ export default function AdminDealsPage() {
                       <button
                         onClick={() => moveDeal(index, -1)}
                         disabled={index === 0}
-                        className="rounded-full border border-gray-200 p-2 text-gray-400 hover:text-gray-700 hover:border-gray-300 transition-colors disabled:opacity-40"
+                        className="rounded-full border border-gray-300 bg-white p-2 text-gray-700 hover:text-gray-800 hover:border-gray-400 transition-colors disabled:opacity-40"
                         aria-label="Move up"
                       >
                         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -234,7 +234,7 @@ export default function AdminDealsPage() {
                       <button
                         onClick={() => moveDeal(index, 1)}
                         disabled={index === selectedProducts.length - 1}
-                        className="rounded-full border border-gray-200 p-2 text-gray-400 hover:text-gray-700 hover:border-gray-300 transition-colors disabled:opacity-40"
+                        className="rounded-full border border-gray-300 bg-white p-2 text-gray-700 hover:text-gray-800 hover:border-gray-400 transition-colors disabled:opacity-40"
                         aria-label="Move down"
                       >
                         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -243,7 +243,7 @@ export default function AdminDealsPage() {
                       </button>
                       <button
                         onClick={() => toggleDeal(product.id)}
-                        className="rounded-full border border-red-200 px-3 py-1.5 text-xs font-semibold text-red-500 hover:bg-red-50 transition-colors"
+                        className="rounded-full border border-red-200 bg-white px-3 py-1.5 text-xs font-semibold text-red-600 hover:bg-red-50 transition-colors"
                       >
                         Remove
                       </button>

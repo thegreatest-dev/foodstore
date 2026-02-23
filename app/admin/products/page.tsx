@@ -144,14 +144,14 @@ export default function AdminProductsPage() {
                   <div className="mt-3 flex items-center justify-end gap-2">
                     <button
                       onClick={() => setEditing(product)}
-                      className="text-xs px-3 py-1.5 rounded-full border border-gray-200 hover:border-green-400 hover:text-green-600 transition-colors"
+                      className="text-xs px-3 py-1.5 rounded-full border border-gray-300 text-gray-700 bg-white hover:border-green-400 hover:text-green-600 transition-colors"
                     >
                       Edit
                     </button>
                     <button
                       onClick={() => handleDelete(product.id)}
                       disabled={deleting === product.id}
-                      className="text-xs px-3 py-1.5 rounded-full border border-gray-200 hover:border-red-400 hover:text-red-500 transition-colors disabled:opacity-40"
+                      className="text-xs px-3 py-1.5 rounded-full border border-red-200 text-red-600 bg-white hover:border-red-400 hover:bg-red-50 transition-colors disabled:opacity-40"
                     >
                       {deleting === product.id ? "..." : "Delete"}
                     </button>

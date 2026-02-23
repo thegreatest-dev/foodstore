@@ -209,20 +209,20 @@ export default function AdminAnnouncementsPage() {
                   <div className="flex items-center gap-1.5 flex-wrap justify-end flex-shrink-0 sm:flex-nowrap">
                     <button
                       onClick={() => toggleActive(a)}
-                      className="text-xs px-3 py-1.5 rounded-full border border-gray-200 hover:border-green-400 hover:text-green-600 transition-colors"
+                      className="text-xs px-3 py-1.5 rounded-full border border-gray-300 text-gray-700 bg-white hover:border-green-400 hover:text-green-600 transition-colors"
                     >
                       {a.active ? "Deactivate" : "Activate"}
                     </button>
                     <button
                       onClick={() => startEdit(a)}
-                      className="text-xs px-3 py-1.5 rounded-full border border-gray-200 hover:border-orange-400 hover:text-orange-600 transition-colors"
+                      className="text-xs px-3 py-1.5 rounded-full border border-gray-300 text-gray-700 bg-white hover:border-orange-400 hover:text-orange-600 transition-colors"
                     >
                       Edit
                     </button>
                     <button
                       onClick={() => handleDelete(a.id)}
                       disabled={deleting === a.id}
-                      className="text-xs px-3 py-1.5 rounded-full border border-gray-200 hover:border-red-400 hover:text-red-500 transition-colors disabled:opacity-40"
+                      className="text-xs px-3 py-1.5 rounded-full border border-red-200 text-red-600 bg-white hover:border-red-400 hover:bg-red-50 transition-colors disabled:opacity-40"
                     >
                       {deleting === a.id ? "..." : "Delete"}
                     </button>
