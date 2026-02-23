@@ -61,9 +61,14 @@ export default function AdminBlogPage() {
     try {
       const loadedPosts = await getAllPostsAction();
       setPosts(loadedPosts);
+      setError("");
       setSelectedIds((prev) => prev.filter((id) => loadedPosts.some((p) => p.id === id)));
-    } catch {
-      setError("Failed to load posts.");
+    } catch (error) {
+      const message =
+        error instanceof Error && error.message
+          ? error.message
+          : "Failed to load posts.";
+      setError(message);
     } finally {
       setLoading(false);
     }

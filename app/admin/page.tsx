@@ -211,19 +211,19 @@ export default function AdminDashboard() {
           </div>
         </div>
 
-        <div className="grid grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {cards.map((card) => (
             <Link
               key={card.label}
               href={card.href}
-              className={`bg-white rounded-2xl border ${card.border} p-4 sm:p-5 flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4 hover:shadow-md transition-shadow`}
+              className={`bg-white rounded-2xl border ${card.border} p-5 flex items-center gap-4 hover:shadow-md transition-shadow`}
             >
-              <div className={`w-10 h-10 sm:w-12 sm:h-12 rounded-xl flex items-center justify-center shrink-0 ${card.color}`}>
+              <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${card.color}`}>
                 {card.icon}
               </div>
               <div>
-                <p className="text-[11px] sm:text-xs text-gray-500 leading-tight">{card.label}</p>
-                <p className="text-xl sm:text-2xl font-bold text-gray-900">
+                <p className="text-xs text-gray-500">{card.label}</p>
+                <p className="text-2xl font-bold text-gray-900">
                   {card.count === null ? "—" : card.count}
                 </p>
               </div>
