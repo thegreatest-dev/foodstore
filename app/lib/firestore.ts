@@ -11,8 +11,8 @@ import {
   orderBy,
 } from "firebase/firestore";
 import { db } from "./firebase";
-import { Product } from "@/types/product";
-import { Order } from "@/types/order";
+import { Product } from "@/app/types/product";
+import { Order } from "@/app/types/order";
 
 // Products
 export const getProducts = async (): Promise<Product[]> => {

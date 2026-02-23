@@ -1,4 +1,4 @@
-import { Product } from "@/types/product";
+import { Product } from "@/app/types/product";
 import Image from "next/image";
 
 interface CartItemProps {
