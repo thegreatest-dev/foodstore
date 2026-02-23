@@ -20,6 +20,8 @@ export default function FeaturedProductsCarousel() {
 
   const autoRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const resumeRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const touchStartX = useRef<number | null>(null);
+  const touchEndX = useRef<number | null>(null);
 
   useEffect(() => {
     getProducts().then((data) => {
@@ -83,6 +85,29 @@ export default function FeaturedProductsCarousel() {
     handleInteract();
     setActiveTab(tab);
     setCurrentIndex(0);
+  };
+
+  const handleTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
+    handleInteract();
+    touchStartX.current = e.changedTouches[0].clientX;
+    touchEndX.current = null;
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent<HTMLDivElement>) => {
+    touchEndX.current = e.changedTouches[0].clientX;
+
+    if (touchStartX.current === null || touchEndX.current === null) {
+      return;
+    }
+
+    const swipeDistance = touchStartX.current - touchEndX.current;
+    const swipeThreshold = 40;
+
+    if (swipeDistance > swipeThreshold) {
+      setCurrentIndex((prev) => Math.min(maxIndex, prev + 1));
+    } else if (swipeDistance < -swipeThreshold) {
+      setCurrentIndex((prev) => Math.max(0, prev - 1));
+    }
   };
 
   // Skeleton loader
@@ -150,7 +175,12 @@ export default function FeaturedProductsCarousel() {
       </div>
 
       {/* Carousel */}
-      <div className="overflow-hidden" key={activeTab}>
+      <div
+        className="overflow-hidden"
+        key={activeTab}
+        onTouchStart={handleTouchStart}
+        onTouchEnd={handleTouchEnd}
+      >
         <div
           className="flex transition-transform duration-500 ease-in-out gap-6"
           style={{ transform: `translateX(-${currentIndex * (100 / cardsPerView)}%)` }}
