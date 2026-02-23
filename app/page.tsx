@@ -267,7 +267,7 @@ export default async function Home() {
           </p>
         </div>
 
-        <DealOfTheWeek products={dealProducts} />
+        <DealOfTheWeek products={dealProducts} allProducts={allProducts} />
 
         {/* Navigation Arrows */}
         <div className="flex justify-center gap-2 mt-8">
