@@ -155,7 +155,7 @@ export default function Footer() {
 
       <div className="relative z-10 border-t border-white/10">
         <div className="container mx-auto flex flex-col gap-3 px-4 py-6 text-sm text-white/70 md:flex-row md:items-center md:justify-between">
-          <p>© 2026 DataFoodMart · Crafted by Daniel</p>
+          <p>© 2026 DataFoodMart · Crafted by Daniel & Tammy</p>
           <div className="flex items-center justify-between md:gap-2">
             <div className="flex items-center gap-2 text-xs uppercase tracking-[0.4em] text-white/40">
               <span>Fresh</span>
