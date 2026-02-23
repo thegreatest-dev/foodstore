@@ -9,7 +9,6 @@ type TabType = "featured" | "bestsellers" | "popular";
 
 const AUTO_SCROLL_INTERVAL = 2800; // ms between each auto-advance
 const RESUME_AFTER_INTERACT = 5000; // ms to wait before resuming after user interaction
-const CARD_GAP = 24;
 
 export default function FeaturedProductsCarousel() {
   const [products, setProducts] = useState<Product[]>([]);
@@ -18,13 +17,11 @@ export default function FeaturedProductsCarousel() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [cardsPerView, setCardsPerView] = useState(3);
   const [userInteracted, setUserInteracted] = useState(false);
-  const [viewportWidth, setViewportWidth] = useState(0);
 
   const autoRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const resumeRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const touchStartX = useRef<number | null>(null);
   const touchEndX = useRef<number | null>(null);
-  const viewportRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     getProducts().then((data) => {
@@ -44,26 +41,6 @@ export default function FeaturedProductsCarousel() {
     return () => window.removeEventListener("resize", update);
   }, []);
 
-  useEffect(() => {
-    const updateWidth = () => {
-      setViewportWidth(viewportRef.current?.clientWidth ?? 0);
-    };
-
-    updateWidth();
-    window.addEventListener("resize", updateWidth);
-
-    let observer: ResizeObserver | null = null;
-    if (typeof ResizeObserver !== "undefined" && viewportRef.current) {
-      observer = new ResizeObserver(() => updateWidth());
-      observer.observe(viewportRef.current);
-    }
-
-    return () => {
-      window.removeEventListener("resize", updateWidth);
-      observer?.disconnect();
-    };
-  }, []);
-
   // Derive tab lists from the same Firestore data
   const featuredProducts = products;
   const bestSellerProducts = [...products].sort((a, b) => (b.rating ?? 0) - (a.rating ?? 0));
@@ -75,14 +52,6 @@ export default function FeaturedProductsCarousel() {
     popularProducts;
 
   const maxIndex = Math.max(0, tabProducts.length - cardsPerView);
-  const cardWidth = viewportWidth
-    ? (viewportWidth - CARD_GAP * (cardsPerView - 1)) / cardsPerView
-    : 0;
-  const translateX = currentIndex * (cardWidth + CARD_GAP);
-
-  useEffect(() => {
-    setCurrentIndex((prev) => Math.min(prev, maxIndex));
-  }, [maxIndex]);
 
   // ── Auto-scroll ─────────────────────────────────────────────────────────────
   const startAuto = useCallback(() => {
@@ -211,21 +180,16 @@ export default function FeaturedProductsCarousel() {
         key={activeTab}
         onTouchStart={handleTouchStart}
         onTouchEnd={handleTouchEnd}
-        ref={viewportRef}
       >
         <div
           className="flex transition-transform duration-500 ease-in-out gap-6"
-          style={{ transform: `translateX(-${translateX}px)` }}
+          style={{ transform: `translateX(-${currentIndex * (100 / cardsPerView)}%)` }}
         >
           {tabProducts.map((product) => (
             <div
               key={`${activeTab}-${product.id}`}
               className="flex-shrink-0"
-              style={{
-                width: cardWidth > 0
-                  ? `${cardWidth}px`
-                  : `calc(${100 / cardsPerView}% - ${(cardsPerView - 1) * CARD_GAP / cardsPerView}px)`,
-              }}
+              style={{ width: `calc(${100 / cardsPerView}% - ${(cardsPerView - 1) * 24 / cardsPerView}px)` }}
             >
               <ProductCard
                 id={product.id}

@@ -79,7 +79,7 @@ export default async function Home() {
                   href="/products"
                   className="bg-green-500 text-white px-8 py-3.5 rounded-full text-button font-semibold hover:bg-green-600 active:scale-95 transition-all shadow-md"
                 >
-                  Shop Collection
+                  Browse Fresh Foods
                 </Link>
                 <Link
                   href="/deals"
