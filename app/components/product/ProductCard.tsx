@@ -1,8 +1,9 @@
+
+"use client";
+
 import { Product } from "@/app/types/product";
 import Image from "next/image";
-
 import { useState } from "react";
-
 import { ProductSpecification } from "@/app/types/product";
 
 interface ProductCardProps {
