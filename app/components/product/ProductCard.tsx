@@ -1,6 +1,7 @@
+
+import React, { useState } from "react";
 import { Product } from "@/app/types/product";
 import Image from "next/image";
-
 import { ProductSpecification } from "@/app/types/product";
 
 interface ProductCardProps {
