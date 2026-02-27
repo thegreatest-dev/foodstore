@@ -15,6 +15,7 @@ const categoryGroups = [
     href: "/products?category=beverages",
     sub: [
       { label: "Beverages", href: "/products?category=beverages" },
+      { label: "Vegetables", href: "/products?category=vegetables" },
       { label: "Condiments & Spices", href: "/products?category=condiments-spices" },
       { label: "Oils & Pantry", href: "/products?category=oils-pantry" },
     ],

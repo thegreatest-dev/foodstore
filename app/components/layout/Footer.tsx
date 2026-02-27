@@ -90,11 +90,11 @@ export default function Footer() {
             <div className="rounded-2xl border border-white/10 bg-white/5 p-4 text-sm text-white/70">
               <div className="flex items-center justify-between border-b border-white/10 pb-3">
                 <span>Monday - Friday</span>
-                <span className="text-white">6:00am - 10:00pm</span>
+                <span className="text-white">9:00am - 9:30pm</span>
               </div>
               <div className="flex items-center justify-between py-3">
                 <span>Weekend</span>
-                <span className="text-white">7:00am - 9:00pm</span>
+                <span className="text-white">9:00am - 10:00pm</span>
               </div>
               <p className="mt-3 text-xs uppercase tracking-[0.2em] text-green-300">Curbside pickup available</p>
             </div>

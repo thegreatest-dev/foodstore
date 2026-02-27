@@ -57,6 +57,12 @@ export const CATEGORIES: CategoryConfig[] = [
     isHighlighted: false,
   },
   {
+    id: "vegetables",
+    name: "Vegetables",
+    image: "/images/veg.png",
+    isHighlighted: false,
+  },
+  {
     id: "fresh-produce",
     name: "Fresh Produce",
     image: "/images/potato.png",

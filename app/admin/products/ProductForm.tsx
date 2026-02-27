@@ -27,6 +27,7 @@ const CATEGORIES = [
   "Beverages",
   "Pasta & Packaged Goods",
   "Proteins",
+  "Vegetables",
 ];
 
 interface ProductFormProps {
@@ -52,6 +53,10 @@ export default function ProductForm({ initial, onSuccess }: ProductFormProps) {
   // For adding/editing specifications
   const [specLabel, setSpecLabel] = useState("");
   const [specPrice, setSpecPrice] = useState(0);
+  const [specAddingError, setSpecAddingError] = useState("");
+  const [editSpecIdx, setEditSpecIdx] = useState<number | null>(null);
+  const [editSpecLabel, setEditSpecLabel] = useState("");
+  const [editSpecPrice, setEditSpecPrice] = useState<number>(0);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
   const [uploading, setUploading] = useState(false);
@@ -94,13 +99,16 @@ export default function ProductForm({ initial, onSuccess }: ProductFormProps) {
     setForm((prev) => ({ ...prev, [field]: value }));
 
   const addSpecification = () => {
-    if (!specLabel.trim() || specPrice <= 0) return;
+    setSpecAddingError("");
+    if (!specLabel.trim()) return setSpecAddingError("Enter a label for the specification.");
+    if (specPrice <= 0) return setSpecAddingError("Price must be greater than 0.");
     setForm((prev) => ({
       ...prev,
-      specifications: [...(prev.specifications || []), { label: specLabel, price: specPrice }],
+      specifications: [...(prev.specifications || []), { label: specLabel.trim(), price: specPrice }],
     }));
     setSpecLabel("");
     setSpecPrice(0);
+    setSpecAddingError("");
   };
 
   const removeSpecification = (idx: number) => {
@@ -108,6 +116,35 @@ export default function ProductForm({ initial, onSuccess }: ProductFormProps) {
       ...prev,
       specifications: prev.specifications.filter((_, i) => i !== idx),
     }));
+  };
+
+  const startEditSpecification = (idx: number) => {
+    const spec = form.specifications[idx];
+    setEditSpecIdx(idx);
+    setEditSpecLabel(spec.label);
+    setEditSpecPrice(spec.price);
+    setSpecAddingError("");
+  };
+
+  const saveEditedSpecification = () => {
+    if (editSpecIdx === null) return;
+    if (!editSpecLabel.trim()) return setSpecAddingError("Enter a label for the specification.");
+    if (editSpecPrice <= 0) return setSpecAddingError("Price must be greater than 0.");
+    setForm((prev) => ({
+      ...prev,
+      specifications: prev.specifications.map((s, i) => (i === editSpecIdx ? { label: editSpecLabel.trim(), price: editSpecPrice } : s)),
+    }));
+    setEditSpecIdx(null);
+    setEditSpecLabel("");
+    setEditSpecPrice(0);
+    setSpecAddingError("");
+  };
+
+  const cancelEditSpecification = () => {
+    setEditSpecIdx(null);
+    setEditSpecLabel("");
+    setEditSpecPrice(0);
+    setSpecAddingError("");
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -142,7 +179,7 @@ export default function ProductForm({ initial, onSuccess }: ProductFormProps) {
         </div>
       )}
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {/* Name */}
         <div className="md:col-span-2">
           <label className="block text-sm font-semibold text-gray-700 mb-1">Product Name *</label>
@@ -169,69 +206,86 @@ export default function ProductForm({ initial, onSuccess }: ProductFormProps) {
         </div>
 
 
-        {/* Specifications (Weight/Volume/Size + Price) */}
-        <div className="md:col-span-2">
-          <label className="block text-sm font-semibold text-gray-700 mb-1">Specifications (e.g. 1kg, 500ml, Large) + Price</label>
-          <div className="flex gap-2 mb-2">
-            <input
-              type="text"
-              value={specLabel}
-              onChange={e => setSpecLabel(e.target.value)}
-              placeholder="e.g. 1kg"
-              className="border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-400"
-            />
+        {/* Right column: Price / Specs / Image */}
+        <div className="md:col-span-1">
+          <div className="bg-white rounded-xl p-4 border border-gray-100 min-w-0">
+            <label className="block text-sm font-semibold text-gray-700 mb-1">Default Price (₦) *</label>
             <input
               type="number"
               min={0}
               step={0.01}
-              value={specPrice}
-              onChange={e => setSpecPrice(parseFloat(e.target.value) || 0)}
-              placeholder="Price"
-              className="border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-400"
+              value={form.price}
+              onChange={(e) => set("price", parseFloat(e.target.value) || 0)}
+              className="w-full border border-gray-200 rounded-xl px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-400"
+              required
             />
-            <button type="button" onClick={addSpecification} className="px-4 py-2 rounded-xl bg-green-500 text-white text-sm font-semibold hover:bg-green-600">Add</button>
+
+            <label className="block text-sm font-semibold text-gray-700 mt-3 mb-1">Original Price (₦)</label>
+            <input
+              type="number"
+              min={0}
+              step={0.01}
+              value={form.originalPrice}
+              onChange={(e) => set("originalPrice", parseFloat(e.target.value) || 0)}
+              className="w-full border border-gray-200 rounded-xl px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-400"
+            />
+
+            <p className="text-xs text-gray-400 mt-2">If you add specifications below, they will each have their own price. Default price is used when no specs are provided.</p>
+
+            <hr className="my-3" />
+
+            <label className="block text-sm font-semibold text-gray-700 mb-1">Specifications</label>
+            <div className="flex gap-2 mb-2 items-center min-w-0">
+              <input
+                type="text"
+                value={specLabel}
+                onChange={e => setSpecLabel(e.target.value)}
+                placeholder="e.g. 1kg"
+                className="flex-1 min-w-0 border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-400"
+              />
+              <input
+                type="number"
+                min={0}
+                step={0.01}
+                value={specPrice}
+                onChange={e => setSpecPrice(parseFloat(e.target.value) || 0)}
+                placeholder="Price"
+                className="w-24 sm:w-28 flex-shrink-0 max-w-full border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-400"
+              />
+            </div>
+            <div className="flex items-center gap-2">
+              <button type="button" onClick={addSpecification} disabled={!specLabel.trim() || specPrice <= 0} className="px-3 py-1.5 rounded-full bg-green-500 text-white text-sm font-semibold hover:bg-green-600 disabled:opacity-50">Add Spec</button>
+              <span className="text-xs text-red-500">{specAddingError}</span>
+            </div>
+
+            {form.specifications.length > 0 && (
+              <ul className="mt-3 space-y-2">
+                {form.specifications.map((spec, idx) => (
+                  <li key={idx} className="flex items-center justify-between gap-2 min-w-0">
+                    {editSpecIdx === idx ? (
+                      <div className="flex items-center gap-2 w-full min-w-0">
+                        <input className="flex-1 min-w-0 border border-gray-200 rounded-xl px-2 py-1 text-sm" value={editSpecLabel} onChange={e => setEditSpecLabel(e.target.value)} />
+                        <input className="w-24 sm:w-28 flex-shrink-0 max-w-full border border-gray-200 rounded-xl px-2 py-1 text-sm" type="number" value={editSpecPrice} onChange={e => setEditSpecPrice(parseFloat(e.target.value) || 0)} />
+                        <button type="button" onClick={saveEditedSpecification} className="text-sm text-green-600 ml-2">Save</button>
+                        <button type="button" onClick={cancelEditSpecification} className="text-sm text-gray-500 ml-2">Cancel</button>
+                      </div>
+                    ) : (
+                      <div className="flex items-center gap-3 w-full min-w-0">
+                        <div className="flex-1 min-w-0 text-sm">{spec.label} — ₦{spec.price.toLocaleString()}</div>
+                        <div className="flex items-center gap-2">
+                          <button type="button" onClick={() => startEditSpecification(idx)} className="text-xs text-blue-600">Edit</button>
+                          <button type="button" onClick={() => removeSpecification(idx)} className="text-xs text-red-600">Remove</button>
+                        </div>
+                      </div>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            )}
           </div>
-          {form.specifications.length > 0 && (
-            <ul className="mb-2">
-              {form.specifications.map((spec, idx) => (
-                <li key={idx} className="flex items-center gap-2 text-sm">
-                  <span>{spec.label} - ₦{spec.price.toLocaleString()}</span>
-                  <button type="button" onClick={() => removeSpecification(idx)} className="text-xs text-red-500 ml-2">Remove</button>
-                </li>
-              ))}
-            </ul>
-          )}
-          <p className="text-xs text-gray-400">Leave empty for single price product.</p>
         </div>
 
-        {/* Price */}
-        <div>
-          <label className="block text-sm font-semibold text-gray-700 mb-1">Default Price (₦) *</label>
-          <input
-            type="number"
-            min={0}
-            step={0.01}
-            value={form.price}
-            onChange={(e) => set("price", parseFloat(e.target.value) || 0)}
-            className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-green-400"
-            required
-          />
-        </div>
-
-        {/* Original Price */}
-        <div>
-          <label className="block text-sm font-semibold text-gray-700 mb-1">Original Price (₦)</label>
-          <input
-            type="number"
-            min={0}
-            step={0.01}
-            value={form.originalPrice}
-            onChange={(e) => set("originalPrice", parseFloat(e.target.value) || 0)}
-            className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-green-400"
-          />
-        </div>
-
-        {/* Category */}
+        {/* Main left column fields */}
         <div>
           <label className="block text-sm font-semibold text-gray-700 mb-1">Category</label>
           <select
@@ -245,7 +299,6 @@ export default function ProductForm({ initial, onSuccess }: ProductFormProps) {
           </select>
         </div>
 
-        {/* Stock */}
         <div>
           <label className="block text-sm font-semibold text-gray-700 mb-1">Stock</label>
           <input
@@ -257,7 +310,6 @@ export default function ProductForm({ initial, onSuccess }: ProductFormProps) {
           />
         </div>
 
-        {/* Rating */}
         <div>
           <label className="block text-sm font-semibold text-gray-700 mb-1">Rating (0–5)</label>
           <input
