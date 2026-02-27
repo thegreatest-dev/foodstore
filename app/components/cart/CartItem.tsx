@@ -4,8 +4,8 @@ import Image from "next/image";
 interface CartItemProps {
   product: Product;
   quantity: number;
-  onUpdateQuantity?: (productId: string, quantity: number) => void;
-  onRemove?: (productId: string) => void;
+  onUpdateQuantity?: (productId: string, quantity: number, specification?: string) => void;
+  onRemove?: (productId: string, specification?: string) => void;
 }
 
 export default function CartItem({
@@ -32,7 +32,7 @@ export default function CartItem({
       </div>
       <div className="flex items-center gap-2">
         <button
-          onClick={() => onUpdateQuantity?.(product.id, quantity - 1)}
+          onClick={() => onUpdateQuantity?.(product.id, quantity - 1, (product as any).specification)}
           disabled={quantity <= 1}
           className="h-8 w-8 rounded border border-zinc-300 dark:border-zinc-700 disabled:opacity-50"
         >
@@ -40,14 +40,14 @@ export default function CartItem({
         </button>
         <span className="w-8 text-center">{quantity}</span>
         <button
-          onClick={() => onUpdateQuantity?.(product.id, quantity + 1)}
+          onClick={() => onUpdateQuantity?.(product.id, quantity + 1, (product as any).specification)}
           className="h-8 w-8 rounded border border-zinc-300 dark:border-zinc-700"
         >
           +
         </button>
       </div>
       <button
-        onClick={() => onRemove?.(product.id)}
+        onClick={() => onRemove?.(product.id, (product as any).specification)}
         className="text-red-600 hover:text-red-700 dark:text-red-400"
       >
         Remove

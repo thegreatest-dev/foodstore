@@ -74,7 +74,7 @@ export default function CartPage() {
 
             {items.map((item) => (
               <div
-                key={item.product.id}
+                key={`${item.product.id}-${item.product.specification ?? "default"}`}
                 className="bg-white rounded-2xl p-4 md:p-5 shadow-sm border border-gray-100 grid grid-cols-12 gap-4 items-center group"
               >
                 {/* Image + Name */}
@@ -94,7 +94,7 @@ export default function CartPage() {
                       <p className="text-xs text-gray-400 mt-0.5">{item.product.category}</p>
                     )}
                     <button
-                      onClick={() => removeItem(item.product.id)}
+                      onClick={() => removeItem(item.product.id, item.product.specification)}
                       className="text-xs text-red-400 hover:text-red-600 transition-colors mt-1 flex items-center gap-1"
                     >
                       <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -120,7 +120,7 @@ export default function CartPage() {
                 <div className="col-span-4 md:col-span-2 flex items-center justify-center">
                   <div className="flex items-center gap-2 border border-gray-200 rounded-full px-3 py-1.5">
                     <button
-                      onClick={() => updateQuantity(item.product.id, item.quantity - 1)}
+                      onClick={() => updateQuantity(item.product.id, item.quantity - 1, item.product.specification)}
                       className="w-5 h-5 flex items-center justify-center text-gray-500 hover:text-green-600 transition-colors"
                       aria-label="Decrease"
                     >
@@ -132,7 +132,7 @@ export default function CartPage() {
                       {item.quantity}
                     </span>
                     <button
-                      onClick={() => updateQuantity(item.product.id, item.quantity + 1)}
+                      onClick={() => updateQuantity(item.product.id, item.quantity + 1, item.product.specification)}
                       className="w-5 h-5 flex items-center justify-center text-gray-500 hover:text-green-600 transition-colors"
                       aria-label="Increase"
                     >

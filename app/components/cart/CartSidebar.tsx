@@ -77,7 +77,7 @@ export default function CartSidebar() {
             <div className="flex-1 overflow-y-auto px-4 py-4 space-y-3">
               {items.map((item) => (
                 <div
-                  key={item.product.id}
+                  key={`${item.product.id}-${item.product.specification ?? "default"}`}
                   className="flex items-center gap-3 bg-gray-50 rounded-2xl p-3 group"
                 >
                   {/* Product Image */}
@@ -99,7 +99,7 @@ export default function CartSidebar() {
                     {/* Qty controls */}
                     <div className="flex items-center gap-2 mt-1.5">
                       <button
-                        onClick={() => updateQuantity(item.product.id, item.quantity - 1)}
+                        onClick={() => updateQuantity(item.product.id, item.quantity - 1, item.product.specification)}
                         className="w-6 h-6 rounded-full border border-gray-300 flex items-center justify-center hover:border-green-500 hover:bg-green-50 transition-colors"
                         aria-label="Decrease"
                       >
@@ -111,7 +111,7 @@ export default function CartSidebar() {
                         {item.quantity}
                       </span>
                       <button
-                        onClick={() => updateQuantity(item.product.id, item.quantity + 1)}
+                        onClick={() => updateQuantity(item.product.id, item.quantity + 1, item.product.specification)}
                         className="w-6 h-6 rounded-full border border-gray-300 flex items-center justify-center hover:border-green-500 hover:bg-green-50 transition-colors"
                         aria-label="Increase"
                       >
@@ -128,7 +128,7 @@ export default function CartSidebar() {
                       ₦{(item.product.price * item.quantity).toLocaleString()}
                     </p>
                     <button
-                      onClick={() => removeItem(item.product.id)}
+                      onClick={() => removeItem(item.product.id, item.product.specification)}
                       className="opacity-0 group-hover:opacity-100 transition-opacity text-red-400 hover:text-red-600"
                       aria-label="Remove item"
                     >
