@@ -5,6 +5,8 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { addProduct, updateProduct } from "@/app/lib/products";
 
+import { ProductSpecification } from "@/app/types/product";
+
 export interface ProductFormData {
   id?: string;
   name: string;
@@ -15,6 +17,7 @@ export interface ProductFormData {
   image: string;
   stock: number;
   rating: number;
+  specifications: ProductSpecification[];
 }
 
 const CATEGORIES = [
@@ -40,11 +43,15 @@ const empty: ProductFormData = {
   image: "",
   stock: 0,
   rating: 4.5,
+  specifications: [],
 };
 
 export default function ProductForm({ initial, onSuccess }: ProductFormProps) {
   const router = useRouter();
   const [form, setForm] = useState<ProductFormData>(initial ?? empty);
+  // For adding/editing specifications
+  const [specLabel, setSpecLabel] = useState("");
+  const [specPrice, setSpecPrice] = useState(0);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
   const [uploading, setUploading] = useState(false);
@@ -83,8 +90,25 @@ export default function ProductForm({ initial, onSuccess }: ProductFormProps) {
     }
   };
 
-  const set = (field: keyof ProductFormData, value: string | number) =>
+  const set = (field: keyof ProductFormData, value: any) =>
     setForm((prev) => ({ ...prev, [field]: value }));
+
+  const addSpecification = () => {
+    if (!specLabel.trim() || specPrice <= 0) return;
+    setForm((prev) => ({
+      ...prev,
+      specifications: [...(prev.specifications || []), { label: specLabel, price: specPrice }],
+    }));
+    setSpecLabel("");
+    setSpecPrice(0);
+  };
+
+  const removeSpecification = (idx: number) => {
+    setForm((prev) => ({
+      ...prev,
+      specifications: prev.specifications.filter((_, i) => i !== idx),
+    }));
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -144,9 +168,45 @@ export default function ProductForm({ initial, onSuccess }: ProductFormProps) {
           />
         </div>
 
+
+        {/* Specifications (Weight/Volume/Size + Price) */}
+        <div className="md:col-span-2">
+          <label className="block text-sm font-semibold text-gray-700 mb-1">Specifications (e.g. 1kg, 500ml, Large) + Price</label>
+          <div className="flex gap-2 mb-2">
+            <input
+              type="text"
+              value={specLabel}
+              onChange={e => setSpecLabel(e.target.value)}
+              placeholder="e.g. 1kg"
+              className="border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-400"
+            />
+            <input
+              type="number"
+              min={0}
+              step={0.01}
+              value={specPrice}
+              onChange={e => setSpecPrice(parseFloat(e.target.value) || 0)}
+              placeholder="Price"
+              className="border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-400"
+            />
+            <button type="button" onClick={addSpecification} className="px-4 py-2 rounded-xl bg-green-500 text-white text-sm font-semibold hover:bg-green-600">Add</button>
+          </div>
+          {form.specifications.length > 0 && (
+            <ul className="mb-2">
+              {form.specifications.map((spec, idx) => (
+                <li key={idx} className="flex items-center gap-2 text-sm">
+                  <span>{spec.label} - ₦{spec.price.toLocaleString()}</span>
+                  <button type="button" onClick={() => removeSpecification(idx)} className="text-xs text-red-500 ml-2">Remove</button>
+                </li>
+              ))}
+            </ul>
+          )}
+          <p className="text-xs text-gray-400">Leave empty for single price product.</p>
+        </div>
+
         {/* Price */}
         <div>
-          <label className="block text-sm font-semibold text-gray-700 mb-1">Price (₦) *</label>
+          <label className="block text-sm font-semibold text-gray-700 mb-1">Default Price (₦) *</label>
           <input
             type="number"
             min={0}

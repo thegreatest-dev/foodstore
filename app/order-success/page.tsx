@@ -22,7 +22,7 @@ function OrderSuccessContent() {
 
         <h1 className="text-2xl font-bold text-gray-900 mb-2">Order Placed!</h1>
         <p className="text-gray-500 text-sm mb-6">
-          Thank you for shopping with DataFoodMart. Your order has been saved and our vendor will be in touch shortly.
+          Thank you for shopping with DATAFoodMart. Your order has been saved and our vendor will be in touch shortly.
         </p>
 
         {orderId && (

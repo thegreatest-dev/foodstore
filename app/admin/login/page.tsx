@@ -148,7 +148,7 @@ export default function AdminLoginPage() {
         </div>
 
         <p className="text-center text-xs text-gray-400 mt-6">
-          DataFoodMart Admin · Authorised access only
+          DATAFoodMart Admin · Authorised access only
         </p>
       </div>
     </div>

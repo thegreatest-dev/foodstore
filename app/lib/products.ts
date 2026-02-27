@@ -35,6 +35,7 @@ function toProduct(id: string, data: DocumentData): Product {
     category: data.category ?? "",
     stock: data.stock ?? 0,
     rating: data.rating,
+    specifications: Array.isArray(data.specifications) ? data.specifications : [],
     createdAt: data.createdAt?.toDate(),
     updatedAt: data.updatedAt?.toDate(),
     isDealOfWeek: Boolean(data.isDealOfWeek),

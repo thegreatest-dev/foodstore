@@ -59,7 +59,7 @@ export default function AdminProductsPage() {
         </div>
         <div className="max-w-3xl mx-auto px-4 sm:px-8 py-6 sm:py-10">
           <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 sm:p-8">
-            <ProductForm initial={editing ? { ...editing, originalPrice: editing.originalPrice ?? 0, rating: editing.rating ?? 0 } : undefined} onSuccess={closeForm} />
+            <ProductForm initial={editing ? { ...editing, originalPrice: editing.originalPrice ?? 0, rating: editing.rating ?? 0, specifications: editing.specifications ? editing.specifications : [] } : undefined} onSuccess={closeForm} />
           </div>
         </div>
       </div>

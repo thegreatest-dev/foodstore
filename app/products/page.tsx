@@ -273,6 +273,7 @@ export default async function ProductsPage({
                       rating={product.rating ?? 0}
                       image={product.image}
                       category={product.category}
+                      specifications={product.specifications}
                     />
                   ))}
                 </div>

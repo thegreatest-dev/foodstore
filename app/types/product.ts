@@ -1,3 +1,8 @@
+export interface ProductSpecification {
+  label: string; // e.g. "1kg", "500ml", "Large"
+  price: number;
+}
+
 export interface Product {
   id: string;
   name: string;
@@ -8,6 +13,7 @@ export interface Product {
   category: string;
   stock: number;
   rating?: number;
+  specifications?: ProductSpecification[];
   createdAt?: Date;
   updatedAt?: Date;
   isDealOfWeek?: boolean;
