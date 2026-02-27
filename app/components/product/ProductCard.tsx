@@ -56,33 +56,40 @@ export default function ProductCard({ product, onAddToCart }: ProductCardProps) 
         )}
 
         <div className="flex items-center justify-between mt-3">
-          <div className="flex items-baseline gap-2">
+          <div className="flex flex-col">
+            <div className="flex items-baseline gap-2">
               <span className="text-base sm:text-lg font-bold text-emerald-600">₦{displayPrice?.toLocaleString()}</span>
-            {product.rating && product.rating > 0 && (
-              <span className="text-[11px] text-zinc-500">★ {product.rating}</span>
+            </div>
+            {product.originalPrice && (
+              <div className="text-[11px] text-zinc-500 mt-1">₦{product.originalPrice.toLocaleString()}</div>
             )}
-          </div>
             {hasSpecs && (
               <div className="text-[11px] text-zinc-500 mt-1">Options: {(product.specifications ?? []).length}</div>
             )}
-          <button
-            onClick={() =>
-              addItem({
-                id: product.id,
-                name: product.name,
-                price: displayPrice,
-                originalPrice: product.originalPrice,
-                image: product.image,
-                category: product.category,
-                specification: displayLabel,
-              })
-            }
-            className="w-full sm:w-auto inline-flex items-center gap-2 bg-emerald-500 hover:bg-emerald-600 text-white text-sm px-3 py-2 rounded-full justify-center"
-            aria-label={`Add ${product.name} to cart`}
-          >
-            <span className="text-sm">＋</span>
-            <span className="text-sm">Add</span>
-          </button>
+          </div>
+          <div className="flex items-center gap-2">
+            {product.rating && product.rating > 0 && (
+              <div className="text-[11px] text-zinc-500">★ {product.rating}</div>
+            )}
+            <button
+              onClick={() =>
+                addItem({
+                  id: product.id,
+                  name: product.name,
+                  price: displayPrice,
+                  originalPrice: product.originalPrice,
+                  image: product.image,
+                  category: product.category,
+                  specification: displayLabel,
+                })
+              }
+              className="w-full sm:w-auto inline-flex items-center gap-2 bg-emerald-500 hover:bg-emerald-600 text-white text-sm px-3 py-2 rounded-full justify-center"
+              aria-label={`Add ${product.name} to cart`}
+            >
+              <span className="text-sm">＋</span>
+              <span className="text-sm">Add</span>
+            </button>
+          </div>
         </div>
       </div>
     </div>
