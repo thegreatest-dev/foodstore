@@ -208,6 +208,7 @@ export default function FeaturedProductsCarousel() {
                 image={product.image}
                 category={product.category}
                 buttonColor="green"
+                specifications={product.specifications}
               />
             </div>
           ))}
