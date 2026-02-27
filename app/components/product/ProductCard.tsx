@@ -14,8 +14,8 @@ interface ProductCardProps {
 export default function ProductCard({ product, onAddToCart }: ProductCardProps) {
   const [selectedSpecIdx, setSelectedSpecIdx] = useState(0);
   const hasSpecs = product.specifications && product.specifications.length > 0;
-  const displayPrice = hasSpecs ? product.specifications[selectedSpecIdx]?.price : product.price;
-  const displayLabel = hasSpecs ? product.specifications[selectedSpecIdx]?.label : undefined;
+  const displayPrice = hasSpecs ? (product.specifications ?? [])[selectedSpecIdx]?.price : product.price;
+  const displayLabel = hasSpecs ? (product.specifications ?? [])[selectedSpecIdx]?.label : undefined;
 
   return (
     <div className="rounded-lg border border-zinc-200 dark:border-zinc-800 p-4 transition-shadow hover:shadow-lg">
@@ -39,7 +39,7 @@ export default function ProductCard({ product, onAddToCart }: ProductCardProps) 
             value={selectedSpecIdx}
             onChange={e => setSelectedSpecIdx(Number(e.target.value))}
           >
-            {product.specifications.map((spec, idx) => (
+            {(product.specifications ?? []).map((spec, idx) => (
               <option key={idx} value={idx}>{spec.label} - ₦{spec.price.toLocaleString()}</option>
             ))}
           </select>
