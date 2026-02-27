@@ -74,7 +74,7 @@ export default function ProductCard({
   const bgColor = buttonColor === "green" ? "bg-green-500 hover:bg-green-600" : "bg-orange-500 hover:bg-orange-600";
 
   return (
-    <div className="group bg-white rounded-3xl p-6 border border-gray-100 shadow-md hover:shadow-2xl hover:border-green-400 transition-all duration-300 relative flex flex-col gap-4 min-h-[480px]">
+    <div className="group bg-white rounded-2xl p-3 border border-gray-100 shadow-sm hover:shadow-md hover:border-green-400 transition-all duration-200 relative flex flex-col gap-3">
       {/* Quick Actions - Show on hover */}
       <div className="absolute top-4 right-4 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10">
         {mounted && (
@@ -113,13 +113,13 @@ export default function ProductCard({
 
       {/* Product Image */}
       <Link href={`/products/${id}`} className="block">
-        <div className="relative mb-3 h-44 flex items-center justify-center group-hover:scale-105 transition-transform duration-300 rounded-2xl overflow-hidden bg-gray-50">
+        <div className="relative mb-2 h-32 flex items-center justify-center group-hover:scale-105 transition-transform duration-200 rounded-lg overflow-hidden bg-gray-50">
           <Image
             src={image}
             alt={name}
-            width={240}
-            height={240}
-            className="object-contain h-full w-auto"
+            width={200}
+            height={200}
+            className="object-contain h-full w-auto p-2"
             loading="lazy"
           />
         </div>
@@ -128,10 +128,10 @@ export default function ProductCard({
       {/* Product Info */}
       <div className="flex flex-col gap-2 flex-1">
         {category && (
-          <p className="text-xs text-gray-400 uppercase tracking-wide font-medium truncate">{category}</p>
+          <p className="text-[10px] text-gray-400 uppercase tracking-wide font-medium">{category}</p>
         )}
         <Link href={`/products/${id}`}>
-          <h4 className="text-base font-bold text-gray-900 hover:text-green-500 transition-colors line-clamp-2 leading-snug">
+          <h4 className="text-sm font-semibold text-gray-900 hover:text-green-500 transition-colors line-clamp-2 leading-tight">
             {name}
           </h4>
         </Link>
@@ -139,9 +139,8 @@ export default function ProductCard({
         {/* Specification Selector */}
         {hasSpecs && (
           <div className="mb-1">
-            <label className="block text-xs text-gray-500 mb-1">Choose size/specification:</label>
             <select
-              className="border border-gray-200 rounded-lg px-3 py-2 text-sm w-full"
+              className="border border-gray-200 rounded px-2 py-1 text-sm w-full"
               value={selectedSpecIdx}
               onChange={e => setSelectedSpecIdx(Number(e.target.value))}
             >
@@ -154,14 +153,14 @@ export default function ProductCard({
 
         {/* Price and Rating */}
         <div className="flex items-center justify-between gap-2 mt-2">
-          <div className="flex flex-col min-w-0">
-            <span className="text-2xl font-extrabold text-gray-900 truncate">₦{displayPrice.toLocaleString()}</span>
+          <div className="flex items-baseline gap-2 min-w-0">
+            <span className="text-lg font-bold text-gray-900">₦{displayPrice.toLocaleString()}</span>
             {originalPrice && !hasSpecs && (
-              <span className="text-sm text-gray-400 line-through truncate">₦{originalPrice.toLocaleString()}</span>
+              <span className="text-xs text-gray-400 line-through">₦{originalPrice.toLocaleString()}</span>
             )}
           </div>
-          <div className="flex items-center gap-1 text-orange-500 text-base shrink-0">
-            <svg className="w-5 h-5 fill-current" viewBox="0 0 20 20">
+          <div className="flex items-center gap-1 text-orange-500 text-sm shrink-0">
+            <svg className="w-4 h-4 fill-current" viewBox="0 0 20 20">
               <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
             </svg>
             <span>{rating}k</span>
@@ -169,9 +168,9 @@ export default function ProductCard({
         </div>
 
         {/* Add to Cart Button / Quantity Controls */}
-        <div className="mt-4">
+        <div className="mt-2">
           {quantity > 0 ? (
-            <div className="flex items-center justify-center gap-3 border-2 border-green-500 rounded-full py-2 bg-green-50">
+            <div className="flex items-center justify-center gap-2 border-2 border-green-500 rounded-full py-1.5 bg-green-50">
               <button
                 onClick={handleDecrease}
                 className="w-8 h-8 rounded-full bg-white border border-green-500 flex items-center justify-center hover:bg-green-500 hover:text-white transition-colors"
@@ -192,19 +191,15 @@ export default function ProductCard({
                 </svg>
               </button>
             </div>
-          ) : (
+            ) : (
             <button
               onClick={handleAdd}
-              className={`w-full ${bgColor} text-white py-3 rounded-full text-base font-semibold transition-all duration-300 inline-flex items-center justify-center gap-2 shadow-md hover:shadow-lg transform hover:-translate-y-0.5 relative overflow-hidden group/btn`}
+              className={`inline-flex items-center gap-2 ${bgColor} text-white px-3 py-1.5 rounded-full text-sm font-semibold transition-all duration-200 shadow-sm hover:shadow-md`}
             >
-              {/* Animated background overlay */}
-              <span className={`absolute inset-0 ${buttonColor === "green" ? "bg-green-600" : "bg-orange-600"} transform -translate-x-full group-hover/btn:translate-x-0 transition-transform duration-500 ease-out rounded-full`}></span>
-              <span className="relative z-10 inline-flex items-center justify-center gap-2">
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
-                </svg>
-                Add to Cart
-              </span>
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+              </svg>
+              <span>Add</span>
             </button>
           )}
         </div>

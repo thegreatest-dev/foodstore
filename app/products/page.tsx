@@ -83,8 +83,8 @@ export default async function ProductsPage({
         </div>
       }
     >
-      <div className="min-h-screen bg-white">
-        <div className="container mx-auto px-4 py-8">
+          <div className="min-h-screen bg-white">
+        <div className="container mx-auto px-3 py-6">
           {/* Breadcrumb + header */}
           <div className="mb-8">
             <div className="flex items-center gap-2 text-sm text-gray-500 mb-4">
@@ -262,7 +262,7 @@ export default async function ProductsPage({
               </div>
 
               {filteredProducts.length > 0 ? (
-                <div className="grid grid-cols-2 xl:grid-cols-3 gap-3 sm:gap-6">
+                <div className="grid grid-cols-2 xl:grid-cols-3 gap-2 sm:gap-3">
                   {filteredProducts.map((product) => (
                     <ProductCard
                       key={product.id}
